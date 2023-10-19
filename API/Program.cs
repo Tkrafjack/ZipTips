@@ -1,15 +1,19 @@
 using Infrastructure.Injection;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+InfrastructureInjectionExtensions.AddInfrastructureServices(builder.Services);
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
 {
-    InfrastructureInjectionExtensions.AddInfrastructureServices(builder.Services);
-    builder.Services.AddControllers();
-}
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ZipTips API", Version = "v1" });
+});
 
 // Add services to the container.
 builder.Services.AddHttpClient();
-
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient("censusBusinessMetrics", httpClient =>
 {
@@ -42,7 +46,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//needed **look up what this does**
 app.MapControllers();
 
 app.Run();
