@@ -1,37 +1,29 @@
-using Microsoft.OpenApi.Models;
-using System.Reflection;
+using Infrastructure.Injection;
 
 var builder = WebApplication.CreateBuilder(args);
+{
+    InfrastructureInjectionExtensions.AddInfrastructureServices(builder.Services);
+    builder.Services.AddControllers();
+}
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-
 builder.Services.AddHttpClient();
 
-builder.Services.AddControllers();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-//    c.IncludeXmlComments(xmlPath);
-//    c.SwaggerDoc("v1", new OpenApiInfo
-//    {
-//        Title = "Zip Tips API",
-//        Version = "v1",
-//        Description = "",
-//        Contact = new OpenApiContact
-//        {
-//            Name = "Tylor Krafjack",
-//            Email = "TKrafjack@gmai.com",
-//            Url = new Uri(""),
-//        }
-//    });
-//});
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient("ExchangeRateData", httpClient =>
+builder.Services.AddHttpClient("censusBusinessMetrics", httpClient =>
 {
-    httpClient.BaseAddress = new Uri(builder.Configuration["CurrencyConverterService:APIURL"]);
-    httpClient.DefaultRequestHeaders.Add("apikey", builder.Configuration["CurrencyConverterService:APIKEY"]);
+    httpClient.BaseAddress = new Uri("https://api.census.gov/data/2018/zbp");
+});
+
+builder.Services.AddHttpClient("zippopotamus", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("http://api.zippopotam.us/us/");
+});
+
+builder.Services.AddHttpClient("rentCast", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://api.rentcast.io/v1/markets?");
 });
 
 var app = builder.Build();
@@ -44,21 +36,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
+//needed **look up what this does**
 app.MapControllers();
 
-app.MapRazorPages();
-
 app.Run();
+
+//TODO: remove Razor and replace with React frontend
+//TODO: change swagger url path
