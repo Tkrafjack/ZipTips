@@ -25,7 +25,7 @@ builder.Services.AddHttpClient("zippopotamus", httpClient =>
     httpClient.BaseAddress = new Uri("http://api.zippopotam.us/us/");
 });
 
-builder.Services.AddHttpClient("rentCast", httpClient =>
+builder.Services.AddHttpClient("rentcast", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://api.rentcast.io/v1/markets?");
 });
@@ -49,6 +49,3 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
-
-//TODO: remove Razor and replace with React frontend
-//TODO: change swagger url path

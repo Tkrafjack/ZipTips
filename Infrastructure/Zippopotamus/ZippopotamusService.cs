@@ -15,21 +15,26 @@ namespace Infrastructure.Services.Zippopotamus
 
         public async Task<LocationData> GetStateAndCity(int zip) 
         {
+            //create client using zippopotamus data in program file
             var client = factory.CreateClient("zippopotamus");
+            //adding passed zipcode as path variable to url
             var url = client.BaseAddress + $"{zip}";
 
-            var jsonResponse = await client.GetAsync(url);
+            //getting HTTP response from previously created request
+            var response = await client.GetAsync(url);
 
-            if (jsonResponse.IsSuccessStatusCode)
+            //throw if response code isnt successful
+            if (response.IsSuccessStatusCode)
             {
-                var responseString = await jsonResponse.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<LocationData>(responseString);
+                //get json data, serialize data to a string, then deserialize to LocationData
+                var responseString = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<LocationData>(responseString);
 
-                return response;
+                return responseData;
             }
             else
             {
-                throw new Exception($"{jsonResponse.StatusCode}: Error getting state from Zippopotamus api");
+                throw new Exception($"{response.StatusCode}: Error getting state from Zippopotamus api");
             }
         }
     }

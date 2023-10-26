@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuntionalTests", "Funtional
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{612D1DDA-6AC5-4F33-98F3-92F5F2548770}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C757D1B6-CEB7-45DD-B5FE-5179210B708F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{C757D1B6-CEB7-45DD-B5FE-5179210B708F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,9 +1,9 @@
-﻿using API.Models;
+﻿using Application.Models;
 
 namespace Application.Contracts
 {
     public interface IRentService
     {
-        //public Task<RentingData> GetRentingData(int zip);
+        public Task<List<RentingData>> GetRentingData(int zip);
     }
 }

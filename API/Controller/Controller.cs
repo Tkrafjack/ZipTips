@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.Contracts;
+using Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controller
@@ -11,11 +12,13 @@ namespace API.Controller
     {
         private readonly ICensusService censusService;
         private readonly ILocationService zippopotamusService;
+        private readonly IRentService rentService;
 
-        public ZipController(ICensusService censusService, ILocationService zippopotamusService)
+        public ZipController(ICensusService censusService, ILocationService zippopotamusService, IRentService rentService)
         {
             this.censusService = censusService;
             this.zippopotamusService = zippopotamusService;
+            this.rentService = rentService;
         }
 
         [HttpGet]
@@ -23,11 +26,13 @@ namespace API.Controller
         {
             BusinessMetrics businessMetricsResult;
             LocationData zippopotamusResponse;
+            List<RentingData> rentcastResponse;
 
             try
             {
                 businessMetricsResult = await censusService.GetBusinessMetrics(zip, businessSector);
                 zippopotamusResponse = await zippopotamusService.GetStateAndCity(zip);
+                rentcastResponse = await rentService.GetRentingData(zip);
             }
             catch (Exception ex)
             {
@@ -41,7 +46,8 @@ namespace API.Controller
                 ZipCode = businessMetricsResult.ZipCode,
                 BusinessSector = businessMetricsResult.BusinessSector,
                 State = zippopotamusResponse.Places[0].State,
-                City = zippopotamusResponse.Places[0].City
+                City = zippopotamusResponse.Places[0].City,
+                RentalData = rentcastResponse
             };
             return Ok(response);
         }

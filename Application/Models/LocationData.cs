@@ -5,24 +5,24 @@ namespace API.Models
     public class LocationData
     {
         [JsonProperty("post code")]
-        public string ZipCode { get; set; }
+        public string ZipCode { get; set; } = string.Empty;
 
         [JsonProperty("places")]
-        public List<PlacesModel> Places { get; set; }
+        public List<PlacesModel> Places { get; set; } = new List<PlacesModel>();
     }
 
     public class PlacesModel
     {
         [JsonProperty("place name")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [JsonProperty("state")]
-        public string State { get; set; }
+        public string State { get; set; } = string.Empty;
 
         [JsonProperty("longitude")]
-        public string Longitude { get; set; }
+        public string Longitude { get; set; } = string.Empty;
 
         [JsonProperty("latitude")]
-        public string Latitude { get; set; }
+        public string Latitude { get; set; } = string.Empty;
     }
 }
