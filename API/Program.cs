@@ -1,7 +1,34 @@
+using Infrastructure.Injection;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
+InfrastructureInjectionExtensions.AddInfrastructureServices(builder.Services);
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ZipTips API", Version = "v1" });
+});
+
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient("censusBusinessMetrics", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://api.census.gov/data/2018/zbp");
+});
+
+builder.Services.AddHttpClient("zippopotamus", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("http://api.zippopotam.us/us/");
+});
+
+builder.Services.AddHttpClient("rentcast", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://api.rentcast.io/v1/markets?");
+});
 
 var app = builder.Build();
 
@@ -13,13 +40,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
